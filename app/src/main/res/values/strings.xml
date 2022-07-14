@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">WildFiresLive</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyALA6f1nN_0Nr8H_vB1AsNCQQE9NL2bzbM</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
