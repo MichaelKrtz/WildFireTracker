@@ -1,17 +1,23 @@
 package com.example.wildfireslive.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.wildfireslive.R
 import com.example.wildfireslive.databinding.FragmentFireMapBinding
+import com.example.wildfireslive.ui.viewmodels.FireMapViewModel
 import com.google.android.gms.maps.GoogleMap
 
 
 class FireMapFragment : Fragment(R.layout.fragment_fire_map){
     private lateinit var binding: FragmentFireMapBinding
+
+    private val viewModel: FireMapViewModel by viewModels()
+    private val TAG = "FireMapFragment"
+
 
     private var map: GoogleMap? = null
 

@@ -8,4 +8,8 @@
         android:id="@+id/fireMapFragment"
         android:name="com.example.wildfireslive.ui.fragments.FireMapFragment"
         android:label="FireMapFragment" />
+    <fragment
+        android:id="@+id/savedLocationsFragment"
+        android:name="com.example.wildfireslive.ui.fragments.SavedLocationsFragment"
+        android:label="SavedLocationsFragment" />
 </navigation>
