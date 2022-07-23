@@ -1,4 +1,4 @@
-package com.example.wildfireslive.network
+package com.example.wildfireslive.network.eonetapi
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -39,7 +39,11 @@ interface EonetApiService {
     @Headers("Accept: application/json")
     suspend fun getWildFires(
         @Query("category")
-        eventCategory: String = "wildfires"
+        eventCategory: String = "wildfires",
+        @Query("status")
+        status: String = "open",
+        @Query("days")
+        days: Int = 20
     ): Response<WildFiresResponse>
 }
 

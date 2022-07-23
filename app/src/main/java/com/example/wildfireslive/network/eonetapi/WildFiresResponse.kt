@@ -1,4 +1,4 @@
-package com.example.wildfireslive.network
+package com.example.wildfireslive.network.eonetapi
 
 data class WildFiresResponse(
     val description: String,

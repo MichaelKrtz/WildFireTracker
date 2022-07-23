@@ -3,17 +3,32 @@ package com.example.wildfireslive.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wildfireslive.R
 import com.example.wildfireslive.databinding.ItemSavedLocationBinding
-import com.example.wildfireslive.db.SavedLocation
+import com.example.wildfireslive.db.entities.SavedLocation
 
 class SavedLocationAdapter(
-    var savedLocations: List<SavedLocation>
 ) : RecyclerView.Adapter<SavedLocationAdapter.SavedLocationViewHolder>(){
 
 
+    val diffCallback = object : DiffUtil.ItemCallback<SavedLocation>() {
+        override fun areItemsTheSame(oldItem: SavedLocation, newItem: SavedLocation): Boolean {
+            return oldItem.id == newItem.id
+        }
 
+        override fun areContentsTheSame(oldItem: SavedLocation, newItem: SavedLocation): Boolean {
+            return oldItem.hashCode() == newItem.hashCode()
+        }
+    }
+
+    val differ = AsyncListDiffer(this, diffCallback)
+
+    fun submitList(list: List<SavedLocation>) {
+        return differ.submitList(list)
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedLocationViewHolder {
@@ -22,23 +37,25 @@ class SavedLocationAdapter(
     }
 
     override fun onBindViewHolder(holder: SavedLocationViewHolder, position: Int) {
-        var binding: ItemSavedLocationBinding = ItemSavedLocationBinding.bind(holder.itemView)
+        val location = differ.currentList[position]
+        val binding: ItemSavedLocationBinding = ItemSavedLocationBinding.bind(holder.itemView)
         holder.itemView.apply {
             binding.apply {
-                tvCity.text = savedLocations[position].city
-                tvLocation.text = savedLocations[position].location.toString()
-                tvDate.text = savedLocations[position].date.toString()
-                if (savedLocations[position].sendAlerts) switchAlerts.isChecked = true
-                if (savedLocations[position].hasLiveEvent) {
+                tvCity.text = location.city
+                tvLocation.text = location.location.toString()
+                tvDate.text = location.date.toString()
+                if (location.sendAlerts) switchAlerts.isChecked = true
+                if (location.hasLiveEvent) {
                     tvLive.highlightColor
                     ivFire.visibility = View.VISIBLE
                 }
             }
         }
     }
+    
 
     override fun getItemCount(): Int {
-        return savedLocations.size
+        return differ.currentList.size
     }
 
     inner class SavedLocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
