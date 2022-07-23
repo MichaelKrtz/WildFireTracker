@@ -13,7 +13,7 @@ interface SavedLocationDAO {
     @Delete
     suspend fun deleteSavedLocation(savedLocation: SavedLocation)
 
-    @Query(value = "SELECT * FROM saved_locations")
+    @Query("SELECT * FROM saved_locations ORDER BY id ASC")
     fun getAllSavedLocationsSortedById(): LiveData<List<SavedLocation>>
 
 }

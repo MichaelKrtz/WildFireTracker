@@ -15,7 +15,7 @@ class Converters {
 
     @TypeConverter
     fun toLocalDate(stringDate: String): LocalDate {
-        return LocalDate.parse(stringDate, DateTimeFormatter.BASIC_ISO_DATE)
+        return LocalDate.parse(stringDate, DateTimeFormatter.ISO_LOCAL_DATE)
     }
 
     @TypeConverter
