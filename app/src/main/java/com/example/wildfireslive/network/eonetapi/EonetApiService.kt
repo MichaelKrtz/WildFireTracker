@@ -1,5 +1,6 @@
 package com.example.wildfireslive.network.eonetapi
 
+import com.google.android.gms.maps.model.LatLng
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -44,6 +45,19 @@ interface EonetApiService {
         status: String = "open",
         @Query("days")
         days: Int = 20
+    ): Response<WildFiresResponse>
+
+    @GET("api/v3/events")
+    @Headers("Accept: application/json")
+    suspend fun getWildFiresInLatLngBox(
+        @Query("category")
+        eventCategory: String = "wildfires",
+        @Query("status")
+        status: String = "open",
+        @Query("days")
+        days: Int = 20,
+        @Query("bbox")
+        bbox: List<Double>
     ): Response<WildFiresResponse>
 }
 

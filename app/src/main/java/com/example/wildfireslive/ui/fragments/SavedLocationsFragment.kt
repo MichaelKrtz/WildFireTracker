@@ -19,7 +19,6 @@ import java.util.*
 
 class SavedLocationsFragment : Fragment(R.layout.fragment_saved_locations) {
 
-
     private lateinit var savedLocationAdapter: SavedLocationAdapter
     private lateinit var binding: FragmentSavedLocationsBinding
     private lateinit var viewModel: SavedLocationsViewModel
@@ -33,18 +32,9 @@ class SavedLocationsFragment : Fragment(R.layout.fragment_saved_locations) {
         viewModel = SavedLocationsViewModel(mContext)
         setupRecyclerView()
 
-
-
-        //Log.v(TAG, "savedLocations ${viewModel.savedLocations.value?.get(0)?.city}")
-
-
-
         viewModel.savedLocations.observe(viewLifecycleOwner, Observer {
-            //Log.v(TAG, it[0].city)
-
             it?.let { savedLocationAdapter.submitList(it) }
             Log.v(TAG, viewModel.savedLocations.value.toString())
-
         })
         
         binding.btnAddLocation.setOnClickListener {
@@ -53,6 +43,12 @@ class SavedLocationsFragment : Fragment(R.layout.fragment_saved_locations) {
             }
             savedLocationAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun setupRecyclerView() = binding.rvSavedLocations.apply {
+        savedLocationAdapter = SavedLocationAdapter()
+        adapter = savedLocationAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun addLocation() {
@@ -64,19 +60,13 @@ class SavedLocationsFragment : Fragment(R.layout.fragment_saved_locations) {
         if (address != null) {
             Log.v(TAG, "Latitude: ${address.latitude} Longitude: ${address.longitude}")
             val location = SavedLocation(
-                0, city, LatLng(address.latitude, address.longitude), LocalDate.now(),
+                city, LatLng(address.latitude, address.longitude), LocalDate.now(),
                 sendAlerts = false,
-                hasLiveEvent = false
-            )
+                hasLiveEvent = false)
             viewModel.insertSavedLocation(location)
         } else {
             Log.v(TAG, "Location not found")
         }
     }
 
-    private fun setupRecyclerView() = binding.rvSavedLocations.apply {
-        savedLocationAdapter = SavedLocationAdapter()
-        adapter = savedLocationAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-    }
 }

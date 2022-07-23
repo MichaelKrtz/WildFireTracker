@@ -8,8 +8,7 @@ import java.time.LocalDate
 
 @Entity(tableName = "saved_locations")
 data class SavedLocation(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    @PrimaryKey(autoGenerate = false)
     val city: String,
     @Embedded
     val location: LatLng,

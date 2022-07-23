@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Live"
         android:textSize="16sp"
+        android:visibility="invisible"
         app:emojiCompatEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -16,7 +16,7 @@ class SavedLocationAdapter(
 
     val diffCallback = object : DiffUtil.ItemCallback<SavedLocation>() {
         override fun areItemsTheSame(oldItem: SavedLocation, newItem: SavedLocation): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.city == newItem.city
         }
 
         override fun areContentsTheSame(oldItem: SavedLocation, newItem: SavedLocation): Boolean {
@@ -48,6 +48,7 @@ class SavedLocationAdapter(
                 if (location.hasLiveEvent) {
                     tvLive.highlightColor
                     ivFire.visibility = View.VISIBLE
+                    tvLive.visibility = View.VISIBLE
                 }
             }
         }

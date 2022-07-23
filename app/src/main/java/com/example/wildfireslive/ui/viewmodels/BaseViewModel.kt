@@ -15,6 +15,7 @@ abstract class BaseViewModel : ViewModel() {
 
     private val wildFiresRepository: WildFiresRepository = WildFiresRepository()
     val wildFires: MutableLiveData<Resource<WildFiresResponse>> = MutableLiveData()
+    //val wildFires
     private val _status = MutableLiveData<String>()
     private val TAG = "BaseViewModel"
 
@@ -38,6 +39,12 @@ abstract class BaseViewModel : ViewModel() {
             }
         }
     }
+
+//    private fun getWildFiresInLatLngBox(coordinates: List<Double>) {
+//        viewModelScope.launch {
+//            wildFires.po
+//        }
+//    }
 
     private fun handleWildFiresResponse(response: Response<WildFiresResponse>) : Resource<WildFiresResponse> {
         if(response.isSuccessful) {

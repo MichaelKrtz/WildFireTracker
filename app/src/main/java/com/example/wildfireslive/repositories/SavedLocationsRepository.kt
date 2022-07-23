@@ -24,6 +24,6 @@ class SavedLocationsRepository {
 
     suspend fun deleteSavedLocation(savedLocation: SavedLocation) = savedLocationDao.deleteSavedLocation(savedLocation)
 
-    fun getAllSavedLocationsSortedById() = savedLocationDao.getAllSavedLocationsSortedById()
+    fun getAllSavedLocationsSortedByCity() = savedLocationDao.getAllSavedLocationsSortedByCity()
 
 }
