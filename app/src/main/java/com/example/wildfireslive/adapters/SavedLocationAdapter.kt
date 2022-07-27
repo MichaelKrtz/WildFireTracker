@@ -14,7 +14,7 @@ class SavedLocationAdapter(
 ) : RecyclerView.Adapter<SavedLocationAdapter.SavedLocationViewHolder>(){
 
 
-    val diffCallback = object : DiffUtil.ItemCallback<SavedLocation>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<SavedLocation>() {
         override fun areItemsTheSame(oldItem: SavedLocation, newItem: SavedLocation): Boolean {
             return oldItem.city == newItem.city
         }
@@ -24,12 +24,15 @@ class SavedLocationAdapter(
         }
     }
 
-    val differ = AsyncListDiffer(this, diffCallback)
+    private val differ = AsyncListDiffer(this, diffCallback)
 
     fun submitList(list: List<SavedLocation>) {
         return differ.submitList(list)
     }
 
+    fun getSavedLocationAt(pos: Int): SavedLocation {
+        return differ.currentList[pos]
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedLocationViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_saved_location, parent, false)
@@ -42,8 +45,8 @@ class SavedLocationAdapter(
         holder.itemView.apply {
             binding.apply {
                 tvCity.text = location.city
-                tvLocation.text = location.location.toString()
-                tvDate.text = location.date.toString()
+                tvLocation.text = location.lastEventLocation.toString()
+                tvDate.text = location.lastEventDate.toString()
                 if (location.sendAlerts) switchAlerts.isChecked = true
                 if (location.hasLiveEvent) {
                     tvLive.highlightColor

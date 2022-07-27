@@ -26,4 +26,7 @@ class SavedLocationsRepository {
 
     fun getAllSavedLocationsSortedByCity() = savedLocationDao.getAllSavedLocationsSortedByCity()
 
+    suspend fun updateHasLiveEventState(hasLiveEvent: Boolean, cityName: String) =
+        savedLocationDao.updateHasLiveEventState(hasLiveEvent, cityName)
+
 }

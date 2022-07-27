@@ -1,5 +1,6 @@
 package com.example.wildfireslive.db.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,10 +11,12 @@ import java.time.LocalDate
 data class SavedLocation(
     @PrimaryKey(autoGenerate = false)
     val city: String,
-    @Embedded
-    val location: LatLng,
-    val date: LocalDate,
+    @Embedded("city_")
+    val cityCoordinates: LatLng,
     val sendAlerts: Boolean,
     val hasLiveEvent: Boolean,
+    @Embedded("last_event_")
+    val lastEventLocation: LatLng?,
+    val lastEventDate: LocalDate?
 )
 

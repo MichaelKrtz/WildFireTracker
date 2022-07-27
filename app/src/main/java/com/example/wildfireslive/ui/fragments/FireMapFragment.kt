@@ -33,8 +33,6 @@ class FireMapFragment : Fragment(R.layout.fragment_fire_map), OnMapReadyCallback
         binding.mapView.getMapAsync {
             onMapReady(it)
         }
-
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -53,9 +51,7 @@ class FireMapFragment : Fragment(R.layout.fragment_fire_map), OnMapReadyCallback
                     Log.v(TAG, "Loading WildFire events...")
                 }
             }
-
         })
-
     }
 
     private fun addMarkersOnMap(googleMap: GoogleMap, wildFiresResponse: WildFiresResponse) {

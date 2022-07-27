@@ -10,5 +10,10 @@ class WildFiresRepository() {
         EonetApi.retrofitService.getWildFires()
 
     suspend fun getWildFiresInLatLngBox(coordinates: List<Double>): Response<WildFiresResponse> =
-        EonetApi.retrofitService.getWildFiresInLatLngBox(bbox = coordinates)
+        EonetApi.retrofitService.getWildFiresInLatLngBox(
+            bbox = coordinates.toString()
+                .removeSurrounding("[", "]")
+                .filterNot { it.isWhitespace() }
+        )
+
 }

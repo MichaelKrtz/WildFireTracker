@@ -13,7 +13,10 @@ interface SavedLocationDAO {
     @Delete
     suspend fun deleteSavedLocation(savedLocation: SavedLocation)
 
-    @Query("SELECT * FROM saved_locations ORDER BY city ASC")
+    @Query("SELECT * FROM saved_locations")
     fun getAllSavedLocationsSortedByCity(): LiveData<List<SavedLocation>>
+
+    @Query("UPDATE saved_locations SET hasLiveEvent=:hasLiveEvent WHERE city=:cityName")
+    suspend fun updateHasLiveEventState(hasLiveEvent: Boolean, cityName: String)
 
 }

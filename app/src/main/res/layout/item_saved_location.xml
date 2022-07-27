@@ -73,5 +73,5 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvLive"
-        app:srcCompat="@drawable/ic_baseline_fire_white" />
+        app:srcCompat="@drawable/ic_baseline_fire_red" />
 </androidx.constraintlayout.widget.ConstraintLayout>

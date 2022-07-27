@@ -57,7 +57,7 @@ interface EonetApiService {
         @Query("days")
         days: Int = 20,
         @Query("bbox")
-        bbox: List<Double>
+        bbox: String
     ): Response<WildFiresResponse>
 }
 
