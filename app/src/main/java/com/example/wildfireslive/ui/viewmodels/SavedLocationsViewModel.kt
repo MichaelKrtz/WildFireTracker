@@ -36,6 +36,7 @@ class SavedLocationsViewModel(context: Context) : BaseViewModel() {
     }
 
     fun retrieveSavedLocationsWildFireData(savedLocationsList: List<SavedLocation>) {
+        Log.v(TAG, "Refresh Locations")
         for(location in savedLocationsList) {
             val boxCoordinates = getCoordinatesListForLatLngBox(location)
             viewModelScope.launch {
