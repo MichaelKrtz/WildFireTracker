@@ -8,17 +8,11 @@ import com.example.wildfireslive.db.SavedLocationDAO
 import com.example.wildfireslive.db.SavedLocationsDatabase
 import com.google.android.gms.maps.model.LatLng
 import java.time.LocalDate
+import javax.inject.Inject
 
-class SavedLocationsRepository {
-
-    companion object {
-        lateinit var context: Context
-    }
-
-
-    private val db = SavedLocationsDatabase.getInstance(context)
-    private val savedLocationDao: SavedLocationDAO = db.savedLocationDAO
-
+class SavedLocationsRepository @Inject constructor(
+    private val savedLocationDao: SavedLocationDAO
+) {
 
     suspend fun insertSavedLocation(savedLocation: SavedLocation) = savedLocationDao.insertSavedLocation(savedLocation)
 

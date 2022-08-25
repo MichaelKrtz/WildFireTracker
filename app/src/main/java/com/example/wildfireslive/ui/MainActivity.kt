@@ -14,7 +14,9 @@ import com.example.wildfireslive.R
 import com.example.wildfireslive.databinding.ActivityMainBinding
 import com.example.wildfireslive.databinding.FragmentFireMapBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

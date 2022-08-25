@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,29 +20,47 @@ import com.example.wildfireslive.db.entities.SavedLocation
 import com.example.wildfireslive.ui.viewmodels.SavedLocationsViewModel
 import com.example.wildfireslive.util.Resource
 import com.google.android.gms.maps.model.LatLng
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.*
 
+@AndroidEntryPoint
 class SavedLocationsFragment : Fragment(R.layout.fragment_saved_locations) {
 
     private lateinit var savedLocationAdapter: SavedLocationAdapter
     private lateinit var binding: FragmentSavedLocationsBinding
-    private lateinit var viewModel: SavedLocationsViewModel
+    private val viewModel: SavedLocationsViewModel by viewModels()
     private val TAG = "SavedLocationsFragment"
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSavedLocationsBinding.bind(view)
-        viewModel = SavedLocationsViewModel(requireContext())
-        setupRecyclerView()
 
+        setupRecyclerView()
+        subscribeToObservers()
+
+        binding.btnAddLocation.setOnClickListener {
+            if(binding.etvEnterLocation.text.toString() != ""){
+                addLocation()
+            }
+        }
+    }
+
+    private fun setupRecyclerView() = binding.rvSavedLocations.apply {
+        savedLocationAdapter = SavedLocationAdapter()
+        adapter = savedLocationAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this)
+    }
+
+    private fun subscribeToObservers() {
         viewModel.savedLocations.observe(viewLifecycleOwner, Observer { savedLocations ->
-            viewModel.retrieveSavedLocationsWildFireData(savedLocations)
+            viewModel.retrieveSavedLocationsWildFireData()
             savedLocationAdapter.submitList(savedLocations)
-            Log.v(TAG, "Something")
+            Log.v(TAG, "Called retrieveSavedLocationsWildFireData and submitList")
         })
 
         viewModel.savedLocationsWildFires.observe(viewLifecycleOwner, Observer { response ->
@@ -57,19 +76,6 @@ class SavedLocationsFragment : Fragment(R.layout.fragment_saved_locations) {
                 }
             }
         })
-        
-        binding.btnAddLocation.setOnClickListener {
-            if(binding.etvEnterLocation.text.toString() != ""){
-                addLocation()
-            }
-        }
-    }
-
-    private fun setupRecyclerView() = binding.rvSavedLocations.apply {
-        savedLocationAdapter = SavedLocationAdapter()
-        adapter = savedLocationAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this)
     }
 
     private fun addLocation() {

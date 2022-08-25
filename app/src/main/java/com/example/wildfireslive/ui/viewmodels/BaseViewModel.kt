@@ -1,6 +1,5 @@
 package com.example.wildfireslive.ui.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wildfireslive.network.eonetapi.WildFiresResponse
 import com.example.wildfireslive.repositories.WildFiresRepository

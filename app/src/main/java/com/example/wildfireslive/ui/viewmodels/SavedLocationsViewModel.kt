@@ -1,6 +1,5 @@
 package com.example.wildfireslive.ui.viewmodels
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,12 +9,16 @@ import com.example.wildfireslive.network.eonetapi.WildFiresResponse
 import com.example.wildfireslive.repositories.SavedLocationsRepository
 import com.example.wildfireslive.util.LatLngCalculations
 import com.example.wildfireslive.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SavedLocationsViewModel(context: Context) : BaseViewModel() {
+@HiltViewModel
+class SavedLocationsViewModel @Inject constructor(
+    private val savedLocationsRepository: SavedLocationsRepository
+) : BaseViewModel() {
 
     private val TAG = "SavedLocationsViewModel"
-    private val savedLocationsRepository: SavedLocationsRepository
     lateinit var savedLocations: LiveData<List<SavedLocation>>
     val savedLocationsWildFires: LiveData<Resource<WildFiresResponse>>
         get() = _savedLocationsWildFires
@@ -24,8 +27,6 @@ class SavedLocationsViewModel(context: Context) : BaseViewModel() {
 
 
     init {
-        SavedLocationsRepository.context = context
-        savedLocationsRepository = SavedLocationsRepository()
         loadData()
     }
 
@@ -35,26 +36,38 @@ class SavedLocationsViewModel(context: Context) : BaseViewModel() {
         }
     }
 
-    fun retrieveSavedLocationsWildFireData(savedLocationsList: List<SavedLocation>) {
+    fun retrieveSavedLocationsWildFireData() {
         Log.v(TAG, "Refresh Locations")
-        for(location in savedLocationsList) {
-            val boxCoordinates = getCoordinatesListForLatLngBox(location)
-            viewModelScope.launch {
-                try {
-                    val response = wildFiresRepository.getWildFiresInLatLngBox(boxCoordinates)
-                    //_savedLocationsWildFires.postValue(handleWildFiresResponse(response))
-                    val savedLocationWildFires = handleWildFiresResponse(response)
-                    if (savedLocationWildFires is Resource.Success) {
-                        if (savedLocationWildFires.data?.events?.size!! > 0) {
-                            savedLocationsRepository.updateHasLiveEventState(true, location.city)
+        savedLocations.value?.let {
+            Log.v(TAG, savedLocations.value!!.toString())
+            for(location in savedLocations.value!!) {
+                Log.v(TAG, "here is the location $location")
+                val boxCoordinates = getCoordinatesListForLatLngBox(location)
+                viewModelScope.launch {
+                    try {
+                        val response = wildFiresRepository.getWildFiresInLatLngBox(boxCoordinates)
+                        val savedLocationWildFires = handleWildFiresResponse(response)
+                        if (savedLocationWildFires is Resource.Success) {
+                            updateLocationLiveEventState(savedLocationWildFires, location)
                         }
-                        else {
-                            savedLocationsRepository.updateHasLiveEventState(false, location.city)
-                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
+                Log.v(TAG, location.city)
+            }
+        }
+    }
+
+    private suspend fun updateLocationLiveEventState(
+        savedLocationWildFires: Resource<WildFiresResponse>,
+        location: SavedLocation
+    ) {
+        savedLocationWildFires.data?.let {
+            if (it.events.isNotEmpty() && !location.hasLiveEvent) {
+                savedLocationsRepository.updateHasLiveEventState(true, location.city)
+            } else if (it.events.isEmpty() && location.hasLiveEvent) {
+                savedLocationsRepository.updateHasLiveEventState(false, location.city)
             }
         }
     }
@@ -74,21 +87,6 @@ class SavedLocationsViewModel(context: Context) : BaseViewModel() {
         )
     }
 
-//    private fun hasWildFiresInLatLngBox(coordinates: List<Double>) {
-////        var savedLocationWildFires: Resource<WildFiresResponse>
-//        viewModelScope.launch {
-//            //_savedLocationsWildFires.postValue(Resource.Loading())
-////            savedLocationWildFires = Resource.Loading()
-////            try {
-////                val response = wildFiresRepository.getWildFiresInLatLngBox(coordinates)
-////                //_savedLocationsWildFires.postValue(handleWildFiresResponse(response))
-////                savedLocationWildFires = handleWildFiresResponse(response)
-////            } catch (e: Exception) {
-////                e.printStackTrace()
-////            }
-//
-//
-//    }
 
     fun insertSavedLocation(location: SavedLocation) {
         viewModelScope.launch {
