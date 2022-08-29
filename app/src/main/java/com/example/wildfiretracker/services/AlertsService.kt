@@ -25,7 +25,7 @@ class AlertsService : LifecycleService(){
                     Log.v(TAG, "Stopped service")
                 }
                 else -> {
-                    Log.v("Something went Reaaaaaaaally wrong")
+                    Log.v(TAG, "Something went Reaaaaaaaally wrong")
                 }
             }
         }
